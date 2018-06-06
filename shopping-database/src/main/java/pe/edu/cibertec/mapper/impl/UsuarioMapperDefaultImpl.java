@@ -10,6 +10,8 @@ import pe.edu.cibertec.dominio.Usuario;
 import pe.edu.cibertec.dto.UsuarioDto;
 import pe.edu.cibertec.mapper.UsuarioMapper;
 
+import java.util.Objects;
+
 /**
  *
  * @author Java-LM
@@ -24,7 +26,7 @@ public class UsuarioMapperDefaultImpl implements UsuarioMapper{
         usuarioDto.setNombre(object.getNombre());
         usuarioDto.setApellido(object.getApellido());
         usuarioDto.setFechaNacimiento(object.getFechaNacimiento());
-        usuarioDto.setEdad(object.getEdad());
+        usuarioDto.setEdad(Objects.isNull(object.getEdad()) ? 0: object.getEdad());
         return usuarioDto;
     }
 

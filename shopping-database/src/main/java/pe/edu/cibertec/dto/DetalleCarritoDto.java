@@ -17,6 +17,7 @@ public class DetalleCarritoDto extends DtoBase{
     private int cantidad;
     private double precioUnitario;
     private double precioVenta;
+    private double subTotal;
     private double descuento;
 
     public long getProductoId() {
@@ -73,5 +74,13 @@ public class DetalleCarritoDto extends DtoBase{
 
     public void setDescuento(double descuento) {
         this.descuento = descuento;
+    }
+
+    public double getSubTotal() {
+        return subTotal;
+    }
+
+    public void setSubTotal(double subTotal) {
+        this.subTotal = subTotal;
     }
 }

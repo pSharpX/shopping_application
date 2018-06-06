@@ -8,16 +8,12 @@ package pe.edu.cibertec.main;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import pe.edu.cibertec.configuracion.AppConfig;
-import pe.edu.cibertec.dominio.Producto;
-import pe.edu.cibertec.dominio.Usuario;
-import pe.edu.cibertec.repositorio.CarritoCompraRepositorio;
-import pe.edu.cibertec.repositorio.CategoriaRepositorio;
-import pe.edu.cibertec.repositorio.ProductoRepositorio;
-import pe.edu.cibertec.repositorio.UsuarioRepositorio;
-import pe.edu.cibertec.repositorio.impl.CarritoCompraJpaRepositorioImpl;
-import pe.edu.cibertec.repositorio.impl.CategoriaJpaRepositorioImpl;
-import pe.edu.cibertec.repositorio.impl.ProductoJpaRepositorioImpl;
-import pe.edu.cibertec.repositorio.impl.UsuarioJpaRepositorioImpl;
+import pe.edu.cibertec.dto.ProductoDto;
+import pe.edu.cibertec.dto.UsuarioDto;
+import pe.edu.cibertec.servicio.CarritoCompraServicio;
+import pe.edu.cibertec.servicio.CategoriaServicio;
+import pe.edu.cibertec.servicio.ProductoServicio;
+import pe.edu.cibertec.servicio.UsuarioServicio;
 
 /**
  *
@@ -29,18 +25,18 @@ public class Principal {
 
         ApplicationContext ctx = new AnnotationConfigApplicationContext(AppConfig.class);
 
-        ProductoRepositorio productoRepositorio = ctx.getBean(ProductoJpaRepositorioImpl.class);
-        productoRepositorio.obtenerTodos().forEach(p -> {
-            System.out.printf("Producto: %s, Categoria: %s\n", p.getNombre(), p.getCategoria().getNombre());
+        ProductoServicio productoServicio = ctx.getBean(ProductoServicio.class);
+        productoServicio.obtenerTodos().forEach(p -> {
+            System.out.printf("Producto: %s, Categoria: %s\n", p.getNombre(), p.getCategoria());
         });
         
-        CategoriaRepositorio categoriaRepositorio = ctx.getBean(CategoriaJpaRepositorioImpl.class);
-        categoriaRepositorio.obtenerTodos().forEach(c -> {
+        CategoriaServicio categoriaServicio = ctx.getBean(CategoriaServicio.class);
+        categoriaServicio.obtenerTodos().forEach(c -> {
             System.out.printf("Categoria: %s\n", c.getNombre());
         });
 
-        UsuarioRepositorio usuarioRepositorio = ctx.getBean(UsuarioJpaRepositorioImpl.class);
-        Usuario usuario = usuarioRepositorio.buscar(1L);
+        UsuarioServicio usuarioServicio = ctx.getBean(UsuarioServicio.class);
+        UsuarioDto usuario = usuarioServicio.buscar(1L);
 
         if (usuario != null) {
             System.out.printf("Usuario: %d %s %s %d\n", usuario.getId(), usuario.getNombre(), usuario.getApellido(),
@@ -51,17 +47,17 @@ public class Principal {
         // nuevo.setNombre("Carlos");
         // nuevo.setApellido("Perez");
         // usuarioRepositorio.crear(nuevo);        
-        productoRepositorio.obtenerTodos().forEach(p -> {
-            System.out.printf("Producto: %s, Categoria: %s\n", p.getNombre(), p.getCategoria().getNombre());
+        productoServicio.obtenerTodos().forEach(p -> {
+            System.out.printf("Producto: %s, Categoria: %s\n", p.getNombre(), p.getCategoria());
         });
-        Producto producto = productoRepositorio.buscar(1l);
+        ProductoDto producto = productoServicio.buscar(1l);
 
         if (producto != null) {
-            System.out.printf("Producto: %s - Categoria: %s\n", producto.getNombre(), producto.getCategoria().getNombre());
+            System.out.printf("Producto: %s - Categoria: %s\n", producto.getNombre(), producto.getCategoria());
         }
-        CarritoCompraRepositorio carritoRepositorio = ctx.getBean(CarritoCompraJpaRepositorioImpl.class);
-        carritoRepositorio.buscarPorUsuario(1L).forEach(c -> {
-            System.out.printf("Carrito: %d - Usuario: %s\n", c.getId(), c.getUsuario().getApellido());
+        CarritoCompraServicio carritoCompraServicio = ctx.getBean(CarritoCompraServicio.class);
+        carritoCompraServicio.buscarPorUsuario(1L).forEach(c -> {
+            System.out.printf("Carrito: %d - Usuario: %s\n", c.getId(), c.getUsuario());
             System.out.println("----------------------------------------");
 
             /*c.getDetalleCarrito().forEach(dc -> {
@@ -70,8 +66,8 @@ public class Principal {
                         dc.getPrecioUnitario());
             });*/
         });
-        productoRepositorio.obtenerPorCategoriaCriteriaApi(1L).forEach(p -> {
-            System.out.printf("Producto: %s - Categoria: %s\n", p.getNombre(), p.getCategoria().getNombre());
+        productoServicio.obtenerPorCategoriaCriteriaApi(1L).forEach(p -> {
+            System.out.printf("Producto: %s - Categoria: %s\n", p.getNombre(), p.getCategoria());
         });        
     }
 }

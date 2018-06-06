@@ -35,3 +35,5 @@ shopping-database/\.classpath
 shopping-ui/\.classpath
 
 *.pageflow
+
+shopping-database/target/classes/

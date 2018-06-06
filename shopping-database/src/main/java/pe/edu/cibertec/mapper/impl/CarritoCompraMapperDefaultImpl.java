@@ -12,6 +12,8 @@ import pe.edu.cibertec.dto.CarritoCompraDto;
 import pe.edu.cibertec.mapper.CarritoCompraMapper;
 import pe.edu.cibertec.mapper.DetalleCarritoMapper;
 
+import java.util.Objects;
+
 /**
  *
  * @author Java-LM
@@ -30,7 +32,7 @@ public class CarritoCompraMapperDefaultImpl  implements CarritoCompraMapper{
         carritoCompraDto.setFechaCompra(object.getFechaCompra());
         carritoCompraDto.setActivo(object.isActivo());
         carritoCompraDto.setDireccionEnvio(object.getDireccionEnvio());
-        carritoCompraDto.setTotal(object.getTotal().doubleValue());
+        carritoCompraDto.setTotal(Objects.isNull(object.getTotal()) ? 0: object.getTotal().doubleValue());
         carritoCompraDto.setUsuario(object.getUsuario().getNombre());
         carritoCompraDto.setDetalleCarrito(detalleCarritoMapper.mapToListOf(object.getDetalleCarrito()));
         return carritoCompraDto;

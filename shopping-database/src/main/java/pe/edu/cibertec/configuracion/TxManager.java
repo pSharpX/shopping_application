@@ -43,10 +43,12 @@ public class TxManager {
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(){
         LocalContainerEntityManagerFactoryBean lcemfb = new LocalContainerEntityManagerFactoryBean();
         lcemfb.setJpaVendorAdapter(getJpaVendorAdapter());
-        lcemfb.setDataSource(getDataSource());
+        //lcemfb.setDataSource(getDataSource());
+        lcemfb.setDataSource(getHSQLDataSource());
         lcemfb.setPersistenceUnitName("myJpaPersistenceUnit");
         lcemfb.setPackagesToScan("pe.edu.cibertec.dominio");
-        lcemfb.setJpaProperties(jpaProperties());
+        //lcemfb.setJpaProperties(jpaProperties());
+        lcemfb.setJpaProperties(getHSQLProperties());
         return lcemfb;
     }
 
@@ -64,6 +66,29 @@ public class TxManager {
         dataSource.setUsername(env.getProperty("database.username"));
         dataSource.setPassword(env.getProperty("database.password"));
         return dataSource;
+    }
+    
+    @Bean
+    @Qualifier("HSQLDatabase")
+    public DataSource getHSQLDataSource(){
+        BasicDataSource dataSource = new BasicDataSource();
+        dataSource.setDriverClassName(env.getProperty("database.hsql.driverClassName"));
+        dataSource.setUrl(env.getProperty("database.hsql.url"));
+        dataSource.setUsername(env.getProperty("database.hsql.username"));
+        dataSource.setPassword(env.getProperty("database.hsql.password"));
+        return dataSource;
+    }
+    
+    @Bean
+    @Qualifier("HSQLProperties")
+    public Properties getHSQLProperties(){
+        Properties properties = new Properties();
+        properties.put("hibernate.dialect", env.getProperty("hibernate.hsql.dialect"));
+        properties.put("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hsql.hbm2ddl.auto"));
+        //properties.put("hibernate.id.new_generator_mappings", env.getProperty("hibernate.id.new_generator_mappings"));
+        properties.put("hibernate.show_sql", env.getProperty("hibernate.show_sql"));
+        properties.put("hibernate.format_sql", env.getProperty("hibernate.format_sql"));
+        return properties;
     }
 
     @Bean

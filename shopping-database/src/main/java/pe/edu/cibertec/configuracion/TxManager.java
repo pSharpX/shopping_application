@@ -2,6 +2,7 @@ package pe.edu.cibertec.configuracion;
 
 import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -32,11 +33,13 @@ public class TxManager {
     private String driverClassName;
 
     @Bean
-    public PlatformTransactionManager jpaTransactionManager(LocalContainerEntityManagerFactoryBean lcemfb){
+    public PlatformTransactionManager jpaTransactionManager(
+    		@Qualifier("defaultEntityManagerFactory") LocalContainerEntityManagerFactoryBean lcemfb){
         return new JpaTransactionManager(lcemfb.getObject());
     }
 
     @Bean
+    @Qualifier("defaultEntityManagerFactory")
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(){
         LocalContainerEntityManagerFactoryBean lcemfb = new LocalContainerEntityManagerFactoryBean();
         lcemfb.setJpaVendorAdapter(getJpaVendorAdapter());
@@ -53,6 +56,7 @@ public class TxManager {
     }
 
     @Bean
+    @Qualifier("defaultDatabase")
     public DataSource getDataSource(){
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setDriverClassName(env.getProperty("database.driverClassName"));

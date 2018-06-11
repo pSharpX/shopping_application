@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -33,21 +35,32 @@ public class TxManager {
     private String driverClassName;
 
     @Bean
-    public PlatformTransactionManager jpaTransactionManager(
+    @Qualifier("defaultTransactionManager")
+    public PlatformTransactionManager defaultTransactionManager(
     		@Qualifier("defaultEntityManagerFactory") LocalContainerEntityManagerFactoryBean lcemfb){
         return new JpaTransactionManager(lcemfb.getObject());
     }
 
     @Bean
     @Qualifier("defaultEntityManagerFactory")
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory(){
+    public LocalContainerEntityManagerFactoryBean defaultEntityManagerFactory(){
         LocalContainerEntityManagerFactoryBean lcemfb = new LocalContainerEntityManagerFactoryBean();
         lcemfb.setJpaVendorAdapter(getJpaVendorAdapter());
-        //lcemfb.setDataSource(getDataSource());
-        lcemfb.setDataSource(getHSQLDataSource());
-        lcemfb.setPersistenceUnitName("myJpaPersistenceUnit");
+        lcemfb.setDataSource(getDefaultDataSource());
+        lcemfb.setPersistenceUnitName("defaultPersistenceUnit");
         lcemfb.setPackagesToScan("pe.edu.cibertec.dominio");
-        //lcemfb.setJpaProperties(jpaProperties());
+        lcemfb.setJpaProperties(jpaProperties());
+        return lcemfb;
+    }
+
+    @Bean
+    @Qualifier("embeddedEntityManagerFactory")
+    public LocalContainerEntityManagerFactoryBean embeddedEntityManagerFactory(){
+        LocalContainerEntityManagerFactoryBean lcemfb = new LocalContainerEntityManagerFactoryBean();
+        lcemfb.setJpaVendorAdapter(getJpaVendorAdapter());
+        lcemfb.setDataSource(getHSQLDataSource());
+        lcemfb.setPersistenceUnitName("defaultPersistenceUnit");
+        lcemfb.setPackagesToScan("pe.edu.cibertec.dominio");
         lcemfb.setJpaProperties(getHSQLProperties());
         return lcemfb;
     }
@@ -58,8 +71,8 @@ public class TxManager {
     }
 
     @Bean
-    @Qualifier("defaultDatabase")
-    public DataSource getDataSource(){
+    @Qualifier("defaultDatasource")
+    public DataSource getDefaultDataSource(){
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setDriverClassName(env.getProperty("database.driverClassName"));
         dataSource.setUrl(env.getProperty("database.url"));
@@ -67,9 +80,16 @@ public class TxManager {
         dataSource.setPassword(env.getProperty("database.password"));
         return dataSource;
     }
+
+    @Bean
+    @Qualifier("embeddedDatasource")
+    public DataSource getEmbeddedDataSource(){
+        EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
+        return builder.setType(EmbeddedDatabaseType.HSQL).build();
+    }
     
     @Bean
-    @Qualifier("HSQLDatabase")
+    @Qualifier("embeddedHSQLDatasource")
     public DataSource getHSQLDataSource(){
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setDriverClassName(env.getProperty("database.hsql.driverClassName"));

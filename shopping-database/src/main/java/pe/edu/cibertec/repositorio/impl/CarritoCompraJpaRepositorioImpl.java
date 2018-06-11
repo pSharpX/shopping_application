@@ -21,7 +21,7 @@ import pe.edu.cibertec.repositorio.CarritoCompraRepositorio;
 @Repository
 public class CarritoCompraJpaRepositorioImpl implements CarritoCompraRepositorio{
 
-    @PersistenceContext
+    @PersistenceContext(unitName = "defaultPersistenceUnit")
     private EntityManager em;
 
     private static final String SELECT_CARRITO_POR_USUARIO = 

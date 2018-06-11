@@ -19,8 +19,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @EnableJpaRepositories(
 		basePackages = { "pe.edu.cibertec.application.security" },
-		entityManagerFactoryRef = "embeddedEntityManagerFactory",
-		transactionManagerRef = "embeddedTransactionManager"
+		entityManagerFactoryRef = "springDataEmbeddedEntityManagerFactory",
+		transactionManagerRef = "springDataEmbeddedTransactionManager"
 )
 @EnableTransactionManagement
 public class JpaConfig {
@@ -29,27 +29,29 @@ public class JpaConfig {
 	private Environment env;
 
 	@Bean
-	@Qualifier("embeddedDatabase")
-	public DataSource dataSource() {
+	@Qualifier("springDataEmbeddedDatasource")
+	public DataSource embeddedDataSource() {
 		EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
 		return builder.setType(EmbeddedDatabaseType.HSQL).build();
 	}
 	
 	@Bean
-	PlatformTransactionManager embeddedTransactionManager(
-			@Qualifier("embeddedEntityManagerFactory") LocalContainerEntityManagerFactoryBean lcemfb) {
+	@Qualifier("springDataEmbeddedTransactionManager")
+	PlatformTransactionManager springDataEmbeddedTransactionManager(
+			@Qualifier("springDataEmbeddedEntityManagerFactory") LocalContainerEntityManagerFactoryBean lcemfb) {
 		return new JpaTransactionManager(lcemfb.getObject());
 	}
 	
 	@Bean
-	@Qualifier("embeddedEntityManagerFactory")
-	LocalContainerEntityManagerFactoryBean embeddedEntityManagerFactory() {
+	@Qualifier("springDataEmbeddedEntityManagerFactory")
+	LocalContainerEntityManagerFactoryBean springDataEmbeddedEntityManagerFactory() {
 		HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
 		vendorAdapter.setGenerateDdl(true);
 
 		LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
-		factoryBean.setDataSource(dataSource());
+		factoryBean.setDataSource(embeddedDataSource());
 		factoryBean.setJpaVendorAdapter(vendorAdapter);
+		factoryBean.setPersistenceUnitName("securityPersistenceUnit");
 		factoryBean.setPackagesToScan("pe.edu.cibertec.application.security.domain");
 
 		return factoryBean;

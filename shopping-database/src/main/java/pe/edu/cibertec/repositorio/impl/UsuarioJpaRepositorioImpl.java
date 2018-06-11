@@ -26,7 +26,7 @@ import java.util.List;
 public class UsuarioJpaRepositorioImpl
         implements UsuarioRepositorio {
 
-    @PersistenceContext
+    @PersistenceContext(unitName = "defaultPersistenceUnit")
     private EntityManager em;
 
     @Override

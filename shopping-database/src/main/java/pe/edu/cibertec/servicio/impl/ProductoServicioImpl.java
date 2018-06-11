@@ -19,7 +19,7 @@ import pe.edu.cibertec.servicio.ProductoServicio;
  * @author Java-LM
  */
 @Service
-@Transactional
+@Transactional(transactionManager = "defaultTransactionManager")
 public class ProductoServicioImpl implements ProductoServicio {
     
     @Autowired

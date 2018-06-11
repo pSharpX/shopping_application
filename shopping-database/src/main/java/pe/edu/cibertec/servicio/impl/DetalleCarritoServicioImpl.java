@@ -20,7 +20,7 @@ import java.util.List;
  * @author Java-LM
  */
 @Service
-@Transactional
+@Transactional(transactionManager = "defaultTransactionManager")
 public class DetalleCarritoServicioImpl implements DetalleCarritoServicio {
 
     @Autowired

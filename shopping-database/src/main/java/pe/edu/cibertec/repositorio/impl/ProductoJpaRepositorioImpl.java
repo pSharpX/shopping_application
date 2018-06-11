@@ -24,7 +24,7 @@ import pe.edu.cibertec.repositorio.ProductoRepositorio;
 @Repository
 public class ProductoJpaRepositorioImpl implements ProductoRepositorio {
 
-    @PersistenceContext
+    @PersistenceContext(unitName = "defaultPersistenceUnit")
     private EntityManager em;
 
     private static final String SELECT_PRODUCTOS = "SELECT p FROM Producto p";

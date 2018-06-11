@@ -8,5 +8,6 @@ import pe.edu.cibertec.application.security.domain.User;
 
 public interface UserRepository extends CrudRepository<User, String> {
 	long countByEnabled(boolean isEnabled);
-	Optional<User> findByUsernameAndPassword();
+	Optional<User> findByUsername(String username);
+	Optional<User> findByUsernameAndPassword(String username, String password);
 }

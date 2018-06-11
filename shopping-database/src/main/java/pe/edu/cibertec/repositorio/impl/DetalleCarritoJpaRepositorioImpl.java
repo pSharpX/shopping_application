@@ -25,7 +25,7 @@ import pe.edu.cibertec.repositorio.DetalleCarritoRepositorio;
 public class DetalleCarritoJpaRepositorioImpl 
         implements DetalleCarritoRepositorio{
 
-    @PersistenceContext
+    @PersistenceContext(unitName = "defaultPersistenceUnit")
     private EntityManager em;
 
     @Override

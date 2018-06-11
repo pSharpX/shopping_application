@@ -13,7 +13,7 @@ import pe.edu.cibertec.repositorio.CategoriaRepositorio;
 @Repository
 public class CategoriaJpaRepositorioImpl implements CategoriaRepositorio {
 
-	@PersistenceContext
+	@PersistenceContext(unitName = "defaultPersistenceUnit")
 	private EntityManager em;
 
 	private static final String SELECT_CATEGORIAS = "SELECT c FROM Categoria c";

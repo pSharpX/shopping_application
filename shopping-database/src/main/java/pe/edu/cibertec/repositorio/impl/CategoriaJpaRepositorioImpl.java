@@ -7,6 +7,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
+
 import pe.edu.cibertec.dominio.Categoria;
 import pe.edu.cibertec.repositorio.CategoriaRepositorio;
 

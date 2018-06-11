@@ -13,6 +13,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 import org.springframework.stereotype.Repository;
+
 import pe.edu.cibertec.dominio.Usuario;
 import pe.edu.cibertec.repositorio.UsuarioRepositorio;
 

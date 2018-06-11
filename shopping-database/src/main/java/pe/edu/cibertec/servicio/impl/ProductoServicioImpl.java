@@ -7,8 +7,8 @@ package pe.edu.cibertec.servicio.impl;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
+import pe.edu.cibertec.aplicacion.annotations.BusinessService;
 import pe.edu.cibertec.dto.ProductoDto;
 import pe.edu.cibertec.mapper.ProductoMapper;
 import pe.edu.cibertec.repositorio.ProductoRepositorio;
@@ -18,8 +18,7 @@ import pe.edu.cibertec.servicio.ProductoServicio;
  *
  * @author Java-LM
  */
-@Service
-@Transactional(transactionManager = "defaultTransactionManager")
+@BusinessService
 public class ProductoServicioImpl implements ProductoServicio {
     
     @Autowired

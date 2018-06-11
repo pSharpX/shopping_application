@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,6 +15,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
+import pe.edu.cibertec.application.authentication.CustomAuthenticationProvider;
+
 /**
  * Created by CHRISTIAN on 07/06/2018.
  */
@@ -23,19 +26,35 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 
     @Autowired
     private UserDetailsService userDetailsService;
-
+    
     @Autowired
     @Qualifier("persistentTokenRepository")
     private PersistentTokenRepository persistentTokenRepository;
+    
+    @Autowired
+    private CustomAuthenticationProvider customAuthenticationProvider;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
+    
+    @Bean
+	@Override
+	public AuthenticationManager authenticationManagerBean() throws Exception {
+		return super.authenticationManagerBean();
+	}
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+        auth.authenticationProvider(customAuthenticationProvider);
+        auth.inMemoryAuthentication()
+        	.withUser("psharpx")
+        	.password(passwordEncoder().encode("123456"))
+        	.roles("USER");
+        
+        auth.userDetailsService(userDetailsService)
+        	.passwordEncoder(passwordEncoder());
     }
 
     @Override

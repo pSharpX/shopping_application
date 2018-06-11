@@ -14,8 +14,10 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 import org.springframework.stereotype.Repository;
+
 import pe.edu.cibertec.dominio.Producto;
 import pe.edu.cibertec.repositorio.ProductoRepositorio;
+
 
 /**
  *

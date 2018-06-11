@@ -40,6 +40,13 @@ public class TxManager {
     		@Qualifier("defaultEntityManagerFactory") LocalContainerEntityManagerFactoryBean lcemfb){
         return new JpaTransactionManager(lcemfb.getObject());
     }
+    
+    @Bean
+    @Qualifier("embeddedTransactionManager")
+    public PlatformTransactionManager embeddedTransactionManager(
+    		@Qualifier("embeddedEntityManagerFactory") LocalContainerEntityManagerFactoryBean lcemfb){
+        return new JpaTransactionManager(lcemfb.getObject());
+    }
 
     @Bean
     @Qualifier("defaultEntityManagerFactory")
@@ -58,7 +65,7 @@ public class TxManager {
     public LocalContainerEntityManagerFactoryBean embeddedEntityManagerFactory(){
         LocalContainerEntityManagerFactoryBean lcemfb = new LocalContainerEntityManagerFactoryBean();
         lcemfb.setJpaVendorAdapter(getJpaVendorAdapter());
-        lcemfb.setDataSource(getHSQLDataSource());
+        lcemfb.setDataSource(getEmbeddedDataSource());
         lcemfb.setPersistenceUnitName("defaultPersistenceUnit");
         lcemfb.setPackagesToScan("pe.edu.cibertec.dominio");
         lcemfb.setJpaProperties(getHSQLProperties());

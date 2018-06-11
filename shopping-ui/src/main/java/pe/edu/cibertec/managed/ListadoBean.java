@@ -8,6 +8,7 @@ package pe.edu.cibertec.managed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
 import pe.edu.cibertec.dto.CategoriaDto;
 import pe.edu.cibertec.servicio.CategoriaServicio;
 
